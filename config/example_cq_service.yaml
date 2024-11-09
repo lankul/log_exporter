@@ -1,0 +1,32 @@
+metrics:
+  - name: "example_cq_service_metric"
+    help: "This is an example metric too"
+    index: "cq_service-log-*"
+    static_labels:
+      job: "cq_prod"
+      foo: "bar"
+    dynamic_labels:
+      username: "logtags.userName"
+      ip: "ip"
+      appname: "appName"
+      level: "level"
+    query: |
+      {
+        "bool": {
+          "filter": [
+            {
+               "range": {
+                  "@timestamp": {
+                    "gte": "now-30m",
+                    "lte": "now"
+                  }
+               }
+            },
+            {
+              "query_string": {
+                "query": "message:\"find no job\" AND logtags.userName:\"韩媛\""
+              }
+            }
+          ]
+        }
+      }

@@ -1,0 +1,5 @@
+elasticsearch:
+  addresses:
+    - "http://10.11.37.104:9200"
+  username: "elastic"
+  password: "elastic"

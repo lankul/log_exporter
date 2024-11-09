@@ -1,0 +1,46 @@
+metrics:
+  - name: "example_nginx_metric"
+    help: "This is an example metric for nginx"
+    index: "common_nginx_access_log-*"
+    static_labels:
+      job: "cq_prod"
+      hello: "world"
+    dynamic_labels:
+      os_name: "ua.os_name"
+      method: "request_method"
+      xff: "xff"
+    query: |
+      {
+        "bool": {
+          "filter": [
+            {
+              "range": {
+                "@timestamp": {
+                  "gte": "now-3m",
+                  "lte": "now"
+                }
+              }
+            }
+          ],
+          "must": [
+            {
+              "match_phrase": {
+                "ua.name": "Chrome Mobile"
+              }
+            },
+            {
+              "term": {
+                "domain": "cq.wens.com.cn"
+              }
+            },
+            {
+              "range": {
+                "responsetime": {
+                  "gt": 0.9,
+                  "lt": 1
+                }
+              }
+            }
+          ]
+        }
+      }
